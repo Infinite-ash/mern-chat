@@ -75,6 +75,6 @@ export const getGroups = async (req, res) => {
         return res.status(200).json(groups);
     } catch (error) {
         console.error("Error in getUserGroups controller:", error);
-        return res.status(500).json({ message: "An error occurred while retrieving user's groups", error: error.message });
-    }
+        return res.status(500).json({ message: "An error occurred while retrieving user's groups", error: error.message });
+    }
 };

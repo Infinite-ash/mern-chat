@@ -44,11 +44,11 @@ export const addMessage = async (req, res) => {
             { new: true }
         );
 
-        io.to(groupId).emit('newGmessage', savedMessage);
+        io.to(groupId).emit('newGmessage', { newMessage , sender:sender.fullName });
 
         res.status(201).json({ newMessage:newMessage , sender:sender.fullName });
     } catch (error) {
         console.error("Error adding message:", error);
-        res.status(500).json({ message: "An error occurred while adding the message" });
-    }
+        res.status(500).json({ message: "An error occurred while adding the message" });
+    }
 };

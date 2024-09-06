@@ -70,26 +70,35 @@ const UserSelector = () => {
                 <h3 className="text-lg font-medium mb-2">Select Users</h3>
                 <div className="space-y-2">
                     {conversations.map((user) => (
-                        <div key={user._id} className="flex items-center">
-                            <input
-                                type="checkbox"
-                                id={`user-${user._id}`}
-                                checked={selectedUsers.has(user._id)}
-                                onChange={() => handleSelectUser(user._id)}
-                                className="mr-2"
-                            />
-                            <label htmlFor={`user-${user._id}`} className="text-lg">{user.fullName}</label>
-                        </div>
+                        !user?.groupName && <div key={user._id} className="flex items-center">
+                        <input
+                            type="checkbox"
+                            id={`user-${user._id}`}
+                            checked={selectedUsers.has(user._id)}
+                            onChange={() => handleSelectUser(user._id)}
+                            className="mr-2"
+                        />
+                        <label htmlFor={`user-${user._id}`} className="text-lg">{user.fullName}</label>
+                    </div>
                     ))}
                 </div>
             </div>
 
-            <button
+           <div className="flex gap-5">
+           <button
                 onClick={handleAddGroup}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
                 Create Group
             </button>
+            <button
+                onClick={()=> setCreateGroup(prev=>!prev)}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+                cancel
+            </button>
+           </div>
+        
         </div>
     );
 };
