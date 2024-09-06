@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import useGetConversations from '../../hooks/useGetConversations';
-import  useCreateGroup  from '../../hooks/useCreateGroup'; // Ensure this is the correct import
+import { useAuthContext } from '../../context/AuthContext';
+// import  useCreateGroup  from '../../hooks/useCreateGroup'; // Ensure this is the correct import
 
 const UserSelector = () => {
     const { loading, conversations } = useGetConversations();
     const [selectedUsers, setSelectedUsers] = useState(new Set());
     const [groupName, setGroupName] = useState('');
-    // const { createGroup } = useCreateGroup(); // Assume `useCreateGroup` provides a `createGroup` function
+    // const { createGroup } = useCreateGroup(); 
+    const {setCreateGroup} = useAuthContext();
 
     const handleSelectUser = (userId) => {
         setSelectedUsers((prevSelected) => {
@@ -34,6 +36,7 @@ const UserSelector = () => {
         try {
             await createGroup({ groupName, groupMembers: Array.from(selectedUsers) });
             setSelectedUsers(new Set());
+            setCreateGroup(prev=>!prev);
             setGroupName('');
         } catch (error) {
             console.error('Error creating group:', error);

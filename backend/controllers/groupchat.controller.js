@@ -1,5 +1,6 @@
 import Group from "../models/group.model.js";
 import groupMessage from "../models/groupMessage.model.js";
+import User from "../models/user.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 export const addMessage = async (req, res) => {
     try {
@@ -11,10 +12,17 @@ export const addMessage = async (req, res) => {
         if (!group) {
             return res.status(404).json({ message: "Group not found" });
         }
+
         
         if (!group.groupMembers.includes(senderId)) {
             return res.status(403).json({ message: "Sender is not a member of the group" });
         }
+
+        const sender = await User.findById(senderId);
+
+
+
+
         // Create the new message
         const newMessage = new groupMessage({
             content,
@@ -38,9 +46,9 @@ export const addMessage = async (req, res) => {
 
         io.to(groupId).emit('newGmessage', savedMessage);
 
-        res.status(201).json({ newMessage });
+        res.status(201).json({ newMessage:newMessage , sender:sender.fullName });
     } catch (error) {
         console.error("Error adding message:", error);
-        res.status(500).json({ message: "An error occurred while adding the message" });
-    }
+        res.status(500).json({ message: "An error occurred while adding the message" });
+    }
 };

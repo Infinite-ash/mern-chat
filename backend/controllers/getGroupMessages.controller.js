@@ -10,13 +10,16 @@ export const getGroupMessages = async (req, res) => {
         }
 
         // Find the group by ID and populate messages
-        const group = await Group.findById(groupId).populate({
-            path: 'messages',
-            populate: {
-                path: 'senderId',
-                select: 'name'  
-            }
-        });
+        // const group = await Group.findById(groupId).populate({
+        //     path: 'messages',
+        //     populate: {
+        //         path: 'senderId',
+        //         select: 'name'  
+        //     }
+        // });
+
+        const group = await Group.findById(groupId).populate('messages');
+
 
         if (!group) {
             return res.status(404).json({ message: "Group not found" });
@@ -24,10 +27,10 @@ export const getGroupMessages = async (req, res) => {
         // console.log("messages", group.messages);
         // Send the messages as a response
         io.to(groupId).emit('newGmessage', {newMessage:group.messages});
-
+        console.log(group.messages);
         return res.status(200).json({ messages: group.messages });
     } catch (error) {
         console.error("Error retrieving group messages:", error);
-        return res.status(500).json({ message: "An error occurred while retrieving group messages" });
-    }
+        return res.status(500).json({ message: "An error occurred while retrieving group messages" });
+    }
 };

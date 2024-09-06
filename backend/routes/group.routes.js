@@ -7,7 +7,7 @@ import protectRoute from "../middleware/protectRoute.js";
 
 const router = express.Router();
 
-router.post('/create',createGroup);
+router.post('/create',protectRoute,createGroup);
 router.post('/chat',addMessage);
 router.get('/getmessages/:groupId',getGroupMessages);
 router.get("/getMembers/:groupId", getGroupMembers);
@@ -15,11 +15,4 @@ router.post('/allgroups', protectRoute, getGroups);
 
 
 
-export default router;
-
-
-
-
-
-
-
+export default router;

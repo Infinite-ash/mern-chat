@@ -3,13 +3,14 @@ import Group from "../models/group.model.js";
 export const createGroup = async (req, res) => {
     try {
         const { groupMembers, groupName } = req.body;
+        const finalGroupMembers = [...groupMembers,req.user];
         const group = await Group.findOne({ groupName });
         if (group) {
             return res.status(400).json({ message: "Already a group exists with the same name" });
         } else {
             const newGrp = new Group({
                 groupName,
-                groupMembers
+                groupMembers:finalGroupMembers
             });
             console.log(newGrp);
             await newGrp.save();
@@ -74,7 +75,6 @@ export const getGroups = async (req, res) => {
         return res.status(200).json(groups);
     } catch (error) {
         console.error("Error in getUserGroups controller:", error);
-        return res.status(500).json({ message: "An error occurred while retrieving user's groups", error: error.message });
-    }
+        return res.status(500).json({ message: "An error occurred while retrieving user's groups", error: error.message });
+    }
 };
-
